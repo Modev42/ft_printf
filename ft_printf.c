@@ -4,9 +4,9 @@
 int	ft_printf(const char *format, ...)
 {
 	int	i;
-	va_list;
+	va_list args;
 
-	va_start(format);
+	va_start(args,format);
 
 	i = 0;
 	while(*format)
@@ -15,17 +15,8 @@ int	ft_printf(const char *format, ...)
 		{
 			if(format[i] =='c')
 			{
-				
+				total += handle_conversion(format[i], args);
 			}
-			else if(format[i] == 's')
-			{
-
-			} 
-			else if(format[i] == 'p')
-			{
-
-			}
-
 		}	
 		else
 			ft_putchar_m(format[i]);
