@@ -1,15 +1,38 @@
-include "f_printf.h"
+#include "ft_printf.h"
 int	handle_conversion(char conv, va_list args)
 {
-	
-
-
-
-
-
-
-
-
+	else if (conv == 'c')
+	{
+		char c = (char)va_arg(args, int);
+		return (ft_print_char(c));
+	}	
+	else if (conv == 'd' || conv == 'i')
+	{
+		int m = va_arg(args, int);
+		return (ft_print_int(m));
+	}
+	else if (conv == 'p')
+	{
+		void *ptr = va_arg(args, void *);
+		return (ft_print_ptr(ptr));
+	}
+	else if (conv == 's')
+	{
+		char *str = va_arg(args, char *);
+		return (ft_print_str(str));
+	}
+	else if (conv == 'u')
+	{
+		unsigned int un = va_arg(args, unsigned int);
+		return (ft_print_uns(un));
+	}
+	else if (conv == 'x' || conv == 'X')
+	{
+		unsigned int hex = va_arg(args, unsigned int);
+		return (ft_print_hex(hex));
+	}
+	else if (conv == '%')
+		ft_putchar_m('%');
 }
 
 int	ft_printf(const char *format, ...)
@@ -34,6 +57,6 @@ int	ft_printf(const char *format, ...)
 			i++;
 		}
 	}
-	var_end(args);
+	va_end(args);
 	return (total);
 }
