@@ -1,27 +1,41 @@
 #include "ft_printf.h"
 
-int	ft_print_ptr(void *ptr)
+static int	ft_putchar(char c)
 {
-	uintptr_t	addr;
-	char		hex[20];
-	char		*base = "0123456789abcdef";
-	int			i, len;
+	return (write(1, &c, 1));
+}
 
-	addr = (uintptr_t)ptr;
-	i = 19;
-	hex[i--] = '\0';
-	if (addr == 0)
-		hex[i--] = '0';
+static int	ft_putnbr(unsigned int n)
+{
+	char	buf[10];
+	int		i;
+	int		ret;
+
+	i = 10;
+	if (n == 0)
+		buf[--i] = '0';
 	else
+		while (n)
+			buf[--i] = '0' + (n % 10), n /= 10;
+	ret = write(1, &buf[i], 10 - i);
+	return ((ret == -1) ? -1 : 10 - i);
+}
+
+int	ft_print_int(int n)
+{
+	int		count;
+	int		ret;
+
+	count = 0;
+	if (n < 0)
 	{
-		while (addr > 0)
-		{
-			hex[i--] = base[addr % 16];
-			addr /= 16;
-		}
+		if (ft_putchar('-') == -1)
+			return (-1);
+		count++;
+		n = -n;
 	}
-	write(1, "0x", 2);
-	len = 19 - i - 1 + 2;
-	write(1, &hex[i + 1], len - 2);
-	return (len);
+	ret = ft_putnbr((unsigned int)n);
+	if (ret == -1)
+		return (-1);
+	return (count + ret);
 }

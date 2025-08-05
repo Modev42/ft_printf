@@ -1,27 +1,30 @@
 #include "ft_printf.h"
 
+static int	write_hex(uintptr_t n, char *buf, int i)
+{
+	char	*base = "0123456789abcdef";
+
+	if (n == 0)
+	{
+		buf[--i] = '0';
+		return (i);
+	}
+	while (n)
+		buf[--i] = base[n % 16], n /= 16;
+	return (i);
+}
+
 int	ft_print_ptr(void *ptr)
 {
-	uintptr_t	addr;
-	char		hex[20];
-	char		*base = "0123456789abcdef";
-	int			i, len;
+	char		buf[20];
+	int			start;
+	int			len;
+	int			ret;
 
-	addr = (uintptr_t)ptr;
-	i = 19;
-	hex[i--] = '\0';
-	if (addr == 0)
-		hex[i--] = '0';
-	else
-	{
-		while (addr > 0)
-		{
-			hex[i--] = base[addr % 16];
-			addr /= 16;
-		}
-	}
-	write(1, "0x", 2);
-	len = 19 - i - 1 + 2;
-	write(1, &hex[i + 1], len - 2);
-	return (len);
+	start = write_hex((uintptr_t)ptr, buf, 20);
+	buf[--start] = 'x';
+	buf[--start] = '0';
+	len = 20 - start;
+	ret = write(1, &buf[start], len);
+	return ((ret == -1) ? -1 : len);
 }

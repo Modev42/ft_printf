@@ -9,6 +9,7 @@ int	ft_print_str(char *str)
 	len = 0;
 	while (str[len])
 		len++;
-	write(1, str, len);
+	if (write(1, str, len) == -1)
+		return (-1);
 	return (len);
 }

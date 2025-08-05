@@ -1,25 +1,19 @@
 #include "ft_printf.h"
 
-int	ft_print_hex(unsigned int n)
+int	ft_print_hex(unsigned int n, int upper)
 {
+	char	*base;
 	char	buf[9];
-	char	*base = "0123456789abcdef";
-	int		len, i;
+	int		i;
+	int		ret;
 
+	base = upper ? "0123456789ABCDEF" : "0123456789abcdef";
 	i = 8;
-	buf[i--] = '\0';
+	buf[i] = '\0';
 	if (n == 0)
-		buf[i--] = '0';
-	else
-	{
-		unsigned int nb = n;
-		while (nb > 0)
-		{
-			buf[i--] = base[nb % 16];
-			nb /= 16;
-		}
-	}
-	len = 8 - i - 1;
-	write(1, &buf[i + 1], len);
-	return (len);
+		return (write(1, "0", 1) == -1 ? -1 : 1);
+	while (n)
+		buf[--i] = base[n % 16], n /= 16;
+	ret = write(1, &buf[i], 8 - i);
+	return ((ret == -1) ? -1 : 8 - i);
 }
